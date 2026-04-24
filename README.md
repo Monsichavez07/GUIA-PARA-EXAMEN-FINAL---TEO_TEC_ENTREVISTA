@@ -1,0 +1,2 @@
+# GUIA-PARA-EXAMEN-FINAL---TEO_TEC_ENTREVISTA
+Esta es la guía final para la materia de TEORÍA Y TÉCNICA DE LA ENTREVISTA.

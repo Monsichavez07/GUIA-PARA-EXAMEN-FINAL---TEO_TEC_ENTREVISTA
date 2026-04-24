@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GUÍA - TEORÍA Y TÉCNICA DE LA ENTREVISTA</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy:    #0f1f3d;
+    --navy2:   #162847;
+    --teal:    #2ec4b6;
+    --teal2:   #1a9e92;
+    --mint:    #e8f8f7;
+    --cream:   #fafaf7;
+    --gold:    #f4c542;
+    --red:     #e8453c;
+    --red-bg:  #fff1f0;
+    --green:   #21a67a;
+    --green-bg:#edfaf5;
+    --text:    #1a2640;
+    --muted:   #6b7a96;
+    --border:  #dde3ef;
+    --card-bg: #ffffff;
+    --radius:  14px;
+    --shadow:  0 4px 24px rgba(15,31,61,.10);
+  }
+
+  html { font-size: 16px; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 2rem 1rem 4rem;
+  }
+
+  /* Background decoration */
+  body::before {
+    content: '';
+    position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+    background:
+      radial-gradient(ellipse 60% 40% at 10% 10%, rgba(46,196,182,.08) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 50% at 90% 90%, rgba(15,31,61,.06) 0%, transparent 60%);
+    pointer-events: none; z-index: 0;
+  }
+
+  .shell {
+    position: relative; z-index: 1;
+    width: 100%; max-width: 680px;
+  }
+
+  /* ── Header ── */
+  .header {
+    text-align: center;
+    padding: 2.5rem 0 2rem;
+    animation: fadeDown .6s ease both;
+  }
+  .header-badge {
+    display: inline-block;
+    background: var(--navy);
+    color: var(--teal);
+    font-size: 11px; font-weight: 600;
+    letter-spacing: .12em; text-transform: uppercase;
+    padding: 5px 14px; border-radius: 99px;
+    margin-bottom: 1rem;
+  }
+  .header h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(1.6rem, 4vw, 2.2rem);
+    color: var(--navy);
+    line-height: 1.25;
+    margin-bottom: .5rem;
+  }
+  .header h1 em {
+    font-style: italic;
+    color: var(--teal2);
+  }
+  .header p {
+    font-size: .88rem; color: var(--muted);
+    font-weight: 300;
+  }
+
+  /* ── Card ── */
+  .card {
+    background: var(--card-bg);
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+    padding: 2rem 2rem 1.75rem;
+    animation: fadeUp .5s ease both;
+  }
+
+  /* ── Progress ── */
+  .progress-row {
+    display: flex; align-items: center; gap: 12px;
+    margin-bottom: 1.5rem;
+  }
+  .progress-track {
+    flex: 1; height: 5px;
+    background: #edf0f7;
+    border-radius: 99px; overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--teal), var(--teal2));
+    border-radius: 99px;
+    transition: width .5s cubic-bezier(.4,0,.2,1);
+  }
+  .progress-label {
+    font-size: 12px; font-weight: 600;
+    color: var(--muted); white-space: nowrap;
+    min-width: 52px; text-align: right;
+  }
+
+  /* ── Score ticker ── */
+  .score-ticker {
+    display: flex; align-items: center; gap: 6px;
+    margin-bottom: 1.5rem;
+  }
+  .score-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--border);
+    transition: background .3s;
+    flex-shrink: 0;
+  }
+  .score-dot.hit  { background: var(--green); }
+  .score-dot.miss { background: var(--red); }
+  .score-dot.cur  { background: var(--teal); box-shadow: 0 0 0 3px rgba(46,196,182,.25); }
+
+  /* ── Question ── */
+  .q-num {
+    font-size: 11px; font-weight: 600;
+    letter-spacing: .1em; text-transform: uppercase;
+    color: var(--teal2); margin-bottom: .5rem;
+  }
+  .q-text {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.15rem; line-height: 1.55;
+    color: var(--navy); margin-bottom: 1.4rem;
+  }
+
+  /* ── Options ── */
+  .options { display: flex; flex-direction: column; gap: 10px; margin-bottom: 1.25rem; }
+
+  .opt {
+    position: relative;
+    display: flex; align-items: flex-start; gap: 12px;
+    background: var(--cream);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    padding: 13px 16px;
+    font-size: .93rem; font-weight: 400;
+    color: var(--text);
+    cursor: pointer; text-align: left;
+    transition: border-color .18s, background .18s, transform .12s;
+    line-height: 1.45;
+  }
+  .opt:hover:not(:disabled) {
+    border-color: var(--teal);
+    background: var(--mint);
+    transform: translateX(3px);
+  }
+  .opt-letter {
+    flex-shrink: 0;
+    width: 26px; height: 26px;
+    border-radius: 8px;
+    background: white;
+    border: 1.5px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 600; color: var(--muted);
+    transition: all .18s;
+  }
+  .opt:hover:not(:disabled) .opt-letter {
+    background: var(--teal); border-color: var(--teal); color: white;
+  }
+
+  /* States */
+  .opt.correct {
+    background: var(--green-bg);
+    border-color: var(--green);
+    color: #14734f;
+    transform: translateX(0);
+  }
+  .opt.correct .opt-letter {
+    background: var(--green); border-color: var(--green); color: white;
+  }
+  .opt.wrong {
+    background: var(--red-bg);
+    border-color: var(--red);
+    color: #b02020;
+    transform: translateX(0);
+  }
+  .opt.wrong .opt-letter {
+    background: var(--red); border-color: var(--red); color: white;
+  }
+  .opt.reveal {
+    background: var(--green-bg);
+    border-color: var(--green);
+    color: #14734f;
+  }
+  .opt.reveal .opt-letter {
+    background: var(--green); border-color: var(--green); color: white;
+  }
+  .opt:disabled { cursor: default; }
+
+  /* ── Feedback ── */
+  .feedback {
+    display: none;
+    border-radius: var(--radius);
+    padding: 13px 15px;
+    font-size: .875rem; line-height: 1.6;
+    margin-bottom: 1.25rem;
+    animation: slideIn .3s ease;
+  }
+  .feedback.show { display: flex; gap: 10px; align-items: flex-start; }
+  .feedback.ok  { background: var(--green-bg); color: #14734f; border: 1px solid #b6e9d8; }
+  .feedback.fail{ background: var(--red-bg);   color: #b02020; border: 1px solid #fac9c7; }
+  .fb-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+
+  /* ── Nav ── */
+  .nav-row { display: flex; justify-content: space-between; align-items: center; }
+  .nav-row .spacer { flex: 1; }
+
+  .btn-next {
+    display: none;
+    background: var(--navy);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 11px 22px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: .9rem; font-weight: 500;
+    cursor: pointer;
+    transition: background .18s, transform .12s;
+    letter-spacing: .01em;
+  }
+  .btn-next:hover { background: var(--navy2); transform: translateY(-1px); }
+  .btn-next:active { transform: translateY(0); }
+
+  /* ── Score screen ── */
+  .score-screen {
+    text-align: center;
+    padding: 1.5rem .5rem 1rem;
+    animation: fadeUp .5s ease both;
+  }
+  .score-ring {
+    position: relative;
+    width: 130px; height: 130px;
+    margin: 0 auto 1.5rem;
+  }
+  .score-ring svg { transform: rotate(-90deg); }
+  .ring-bg  { fill: none; stroke: #edf0f7; stroke-width: 10; }
+  .ring-fill{ fill: none; stroke: var(--teal); stroke-width: 10; stroke-linecap: round;
+              transition: stroke-dashoffset 1s cubic-bezier(.4,0,.2,1); }
+  .ring-text {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+  }
+  .ring-num {
+    font-family: 'DM Serif Display', serif;
+    font-size: 2rem; color: var(--navy); line-height: 1;
+  }
+  .ring-sub { font-size: .75rem; color: var(--muted); font-weight: 500; }
+  .score-pct {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.1rem; color: var(--navy);
+    margin-bottom: .4rem;
+  }
+  .score-msg {
+    font-size: .9rem; color: var(--muted);
+    margin-bottom: 2rem; line-height: 1.5;
+  }
+  .btn-restart {
+    background: var(--navy);
+    color: white; border: none;
+    border-radius: 10px; padding: 12px 28px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: .92rem; font-weight: 500;
+    cursor: pointer; transition: background .18s;
+  }
+  .btn-restart:hover { background: var(--teal2); }
+
+  /* ── Footer ── */
+  .footer {
+    text-align: center;
+    margin-top: 2rem;
+    padding-bottom: 1rem;
+    font-size: 0.85rem;
+    color: var(--muted);
+    letter-spacing: 0.02em;
+    animation: fadeUp 0.8s ease both;
+  }
+
+  /* ── Animations ── */
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes pop {
+    0%   { transform: scale(1); }
+    40%  { transform: scale(1.06); }
+    100% { transform: scale(1); }
+  }
+  .opt.correct, .opt.reveal { animation: pop .3s ease; }
+</style>
+</head>
+<body>
+<div class="shell">
+
+  <div class="header">
+    <div class="header-badge">TEORÍA Y TÉCNICA DE LA ENTREVISTA</div>
+    <h1>GUÍA PARA EXAMEN FINAL DE <br><em>TEORÍA Y TÉCNICA DE LA ENTREVISTA</em></h1>
+    <p>Elige la respuesta correcta</p>
+  </div>
+
+  <div class="card" id="card">
+    <div id="app"></div>
+  </div>
+
+  <div class="footer">
+    &copy; 2026 A. A. Durand - PSICOLOGÍA. Todos los derechos reservados.
+  </div>
+
+</div>
+
+<script>
+const Q=[
+  {q:"¿Cómo se define la historia clínica en psicología clínica?",opts:["Un diario personal del paciente","Registro sistemático de datos relevantes del paciente: estado psicológico, antecedentes, evolución y necesidades","Un formato de prescripción médica","Un contrato terapéutico entre paciente y psicólogo"],ans:1,exp:"Es un documento profesional donde el psicólogo recopila aspectos de la realidad del paciente vía entrevista; incluye datos subjetivos, objetivos, diagnóstico, pronóstico y plan de tratamiento."},
+  {q:"¿Qué tipo de datos incluye la historia clínica?",opts:["Solo datos objetivos de exploración física","Únicamente el diagnóstico y el pronóstico","Datos subjetivos (del paciente), objetivos (exploración/complementarias), diagnóstico, pronóstico y plan de tratamiento","Solo los antecedentes familiares"],ans:2,exp:"La historia clínica integra datos subjetivos del paciente, datos objetivos de la exploración, el diagnóstico, el pronóstico y el plan de tratamiento."},
+  {q:"¿Cuál es la herramienta principal con la que el psicólogo recopila la historia clínica?",opts:["Cuestionarios impresos","La entrevista","Pruebas proyectivas","Registros de observación conductual"],ans:1,exp:"El psicólogo recopila los aspectos de la realidad del paciente vía entrevista, que es la base del proceso de evaluación."},
+  {q:"¿Cuál es la función de la entrevista como técnica de evaluación psicológica?",opts:["Solo establecer rapport, sin valor diagnóstico","Sustituir todas las pruebas psicométricas","Ser la técnica base para el diagnóstico y el vínculo terapéutico (rapport)","Aplicarse únicamente al cierre del proceso terapéutico"],ans:2,exp:"La entrevista es la técnica base para el diagnóstico (DX) y el rapport terapéutico; es un instrumento flexible que varía según el enfoque clínico."},
+  {q:"¿Qué etapas incluye la estructura de una entrevista psicológica?",opts:["Anamnesis, diagnóstico, pronóstico y alta","Presentación, rapport, motivo de consulta y cierre con plan de sesiones","Aplicación de pruebas, devolución y seguimiento","Evaluación inicial, intervención y evaluación final"],ans:1,exp:"La entrevista incluye: presentación, rapport, exploración del motivo de consulta y cierre con plan de sesiones."},
+  {q:"¿Por qué se dice que la entrevista es 'flexible por enfoque'?",opts:["Porque el paciente puede cambiar el tema en cualquier momento","Porque su estructura y profundidad varían según el marco teórico del psicólogo (psicoanalítico, cognitivo, sistémico, etc.)","Porque no tiene ningún objetivo definido","Porque solo se usa en terapia breve"],ans:1,exp:"La entrevista es flexible porque su aplicación e interpretación se adaptan al enfoque teórico del profesional, ya sea psicoanálisis, cognitivo-conductual, humanista, sistémico, entre otros."},
+  {q:"¿Qué aspectos de la comunicación no verbal se observan durante la entrevista?",opts:["Nivel socioeconómico y escolaridad","Expresión facial, contacto visual, gestos, postura, tono/volumen de voz y vestimenta/aspecto","Historial médico y resultados de laboratorio","Rendimiento en pruebas psicométricas"],ans:1,exp:"Se observan: expresión facial, contacto visual, gestos, postura, tono y volumen de voz, y vestimenta/aspecto general del paciente."},
+  {q:"¿Cuál es la diferencia entre la entrevista estructurada y la semiestructurada?",opts:["No hay diferencia, son lo mismo","La estructurada usa cuestionario fijo sin desviaciones; la semiestructurada tiene guión básico pero permite libertad y flexibilidad","La semiestructurada es más larga que la estructurada","La estructurada es exclusiva para niños"],ans:1,exp:"Estructurada = cuestionario fijo. Semiestructurada = guión básico + libertad para adaptarse al paciente sin perder los objetivos clínicos."},
+  {q:"¿Qué caracteriza a la entrevista abierta?",opts:["Sigue un guión rígido de preguntas cerradas","Se adapta totalmente al paciente sin estructura previa definida","Se aplica solo en contextos laborales","Solo incluye preguntas de opción múltiple"],ans:1,exp:"La entrevista abierta se adapta completamente al paciente; no sigue un cuestionario fijo ni un guión básico, lo que la hace la más flexible de las tres modalidades."},
+  {q:"¿Cuáles son los objetivos de la entrevista como técnica de recolección de datos?",opts:["Entretener al paciente y reducir su ansiedad","Estandarizar preguntas, recolectar datos eficientes (cualitativos y cuantitativos), analizar la situación y verificar hipótesis","Solo aplicar pruebas y reportar resultados","Establecer el precio de la terapia y firmar el contrato"],ans:1,exp:"Los objetivos son: estandarizar preguntas, recolectar datos eficientes (cualitativos/cuantitativos), analizar la situación del paciente y verificar hipótesis clínicas."},
+  {q:"¿En qué contextos se utiliza la entrevista semidirigida o focal?",opts:["Solo en investigación académica","Psicoterapia breve, evaluación diagnóstica y seguimiento clínico","Exclusivamente en evaluaciones forenses","Solo con poblaciones infantiles"],ans:1,exp:"La entrevista semidirigida se usa en psicoterapia breve, evaluación diagnóstica y seguimiento clínico."},
+  {q:"¿Cuál es la importancia de la historia clínica para el proceso terapéutico?",opts:["Solo sirve como requisito administrativo del consultorio","Proporciona comprensión integral del paciente y contexto; es base para diagnóstico, plan terapéutico y seguimiento","Únicamente facilita la escucha activa","Solo es importante al inicio del tratamiento"],ans:1,exp:"La historia clínica proporciona comprensión integral del paciente y su contexto; es la base para el diagnóstico, el plan terapéutico y el seguimiento. Ayuda en escucha activa, observación verbal/no verbal, precisión diagnóstica y continuidad entre sesiones."},
+  {q:"¿Qué habilidades del terapeuta apoya directamente la historia clínica?",opts:["Habilidades administrativas y de facturación","Escucha activa, observación verbal/no verbal, precisión diagnóstica y continuidad entre sesiones","Solo la habilidad de redacción de informes","Habilidades de marketing del consultorio"],ans:1,exp:"La historia clínica apoya: escucha activa, observación verbal y no verbal, precisión diagnóstica y continuidad entre sesiones."},
+  {q:"¿Qué es el registro o notas terapéuticas?",opts:["Una transcripción literal de todo lo dicho en sesión","Un resumen de sesión con temas clave, conductas, emociones, patrones, objetivos, avances/desafíos y observaciones; no es transcripción literal","El contrato inicial firmado por el paciente","Un informe que el paciente revisa y aprueba"],ans:1,exp:"Las notas terapéuticas son un resumen de sesión (no transcripción literal) que incluye temas clave, conductas, emociones, patrones, objetivos, avances/desafíos y observaciones. Sirven como respaldo legal/ético."},
+  {q:"¿Para qué sirve el registro terapéutico desde el punto de vista legal y ético?",opts:["No tiene valor legal ni ético","Es un respaldo legal/ético que apoya la continuidad, el diagnóstico preciso y el ajuste del tratamiento","Solo sirve si el terapeuta es supervisado","Únicamente para cobrar honorarios"],ans:1,exp:"El registro es un respaldo legal y ético que garantiza continuidad del tratamiento, diagnóstico preciso y ajuste de intervenciones a lo largo del proceso."},
+  {q:"¿Cuál es la estructura típica del modelo del informe psicológico?",opts:["Solo diagnóstico y recomendaciones","Datos de identificación, anamnesis (motivo/antecedentes), pruebas, conclusiones/diagnóstico, sugerencias/plan y observaciones","Únicamente resultados de pruebas psicométricas","Foto, firma y datos de contacto del paciente"],ans:1,exp:"El informe incluye: datos de identificación, anamnesis (motivo de consulta y antecedentes), pruebas aplicadas, conclusiones/diagnóstico, sugerencias/plan de tratamiento y observaciones."},
+  {q:"¿Cuál es la función del modelo del informe psicológico?",opts:["Reemplazar la historia clínica","Ser un documento técnico que sintetiza la evaluación y comunica hallazgos para apoyar decisiones clínicas","Servir como contrato de confidencialidad","Solo comunicar el diagnóstico al paciente"],ans:1,exp:"El informe psicológico es un documento técnico que sintetiza la evaluación y comunica los hallazgos para que se tomen decisiones clínicas informadas."},
+  {q:"¿Cuáles son los 7 elementos principales de la historia clínica?",opts:["Foto, firma, diagnóstico, pronóstico, plan, honorarios y alta","Datos de identificación, motivo de consulta, antecedentes, historia del problema actual, evaluación, diagnóstico/integración y plan de intervención/evolución","Solo anamnesis, diagnóstico y tratamiento","Presentación, rapport, entrevista, pruebas, informe, devolución y cierre"],ans:1,exp:"Los 7 elementos son: (1) datos de identificación, (2) motivo de consulta, (3) antecedentes (personales, familiares, escolares), (4) historia del problema actual, (5) evaluación (pruebas y examen mental), (6) diagnóstico/integración, (7) plan de intervención/evolución."},
+  {q:"¿Qué tipo de antecedentes se recogen en la historia clínica?",opts:["Solo antecedentes médicos","Antecedentes personales, familiares y escolares","Solo antecedentes familiares","Únicamente antecedentes laborales"],ans:1,exp:"La historia clínica recopila antecedentes personales, familiares y escolares del paciente."},
+  {q:"¿Cómo se evalúa la eficacia de la técnica y el avance del tratamiento?",opts:["Mediante una encuesta de satisfacción al final de la terapia","A través de notas de evolución que miden el progreso; se ajustan las intervenciones según avances/desafíos y se evalúa la efectividad","Solo comparando el diagnóstico inicial con el final","Con pruebas estandarizadas aplicadas cada mes"],ans:1,exp:"Se mide el progreso vía notas de evolución; se ajustan las intervenciones según avances y desafíos, facilitando el monitoreo, optimizando la terapia y evaluando su efectividad."},
+  {q:"¿Qué es un cuestionario psicológico?",opts:["Una entrevista no estructurada","Una lista de preguntas/ítems para recopilar datos sobre actitudes, experiencias y opiniones (cuantitativos y cualitativos)","Un instrumento exclusivamente proyectivo","Un examen de conocimientos del paciente"],ans:1,exp:"Un cuestionario es una lista de preguntas/ítems para recopilar datos cuantitativos y cualitativos sobre actitudes, experiencias y opiniones del paciente."},
+  {q:"¿Cuáles son los tipos de preguntas que incluye un cuestionario psicológico?",opts:["Solo preguntas abiertas y de desarrollo","Preguntas abiertas (detalladas), cerradas (opciones fijas) y escalas (ej. del 1 al 10)","Solo preguntas de verdadero o falso","Únicamente preguntas cerradas de opción múltiple"],ans:1,exp:"Los cuestionarios incluyen: preguntas abiertas (respuestas detalladas), preguntas cerradas (opciones fijas) y escalas (numéricas, por ejemplo del 1 al 10)."},
+  {q:"¿Para qué se usan los cuestionarios en psicología clínica?",opts:["Solo para investigación académica","Para evaluación diagnóstica y para profundizar la información obtenida en la entrevista","Únicamente para selección de personal","Para reemplazar la entrevista clínica"],ans:1,exp:"Sus usos clínicos principales son: evaluación diagnóstica y profundización de la información obtenida con otros instrumentos como la entrevista."},
+  {q:"¿Qué es un genograma?",opts:["Una prueba de inteligencia no verbal","Una representación gráfica de características, relaciones y patologías familiares abarcando al menos 3 generaciones","Un mapa del cerebro para identificar lesiones","Un diagrama de flujo del proceso terapéutico"],ans:1,exp:"El genograma es una representación gráfica de características, relaciones y patologías familiares en 3 generaciones, usado para esclarecer el contexto familiar y elaborar hipótesis terapéuticas."},
+  {q:"¿Cuál es el objetivo principal del genograma?",opts:["Medir el coeficiente intelectual familiar","Esclarecer el contexto familiar, identificar pautas generacionales/biopsicosociales y elaborar hipótesis terapéuticas","Solo registrar los nombres y edades de los familiares","Determinar la herencia genética de enfermedades físicas"],ans:1,exp:"El genograma busca esclarecer el contexto familiar, identificar pautas generacionales y biopsicosociales, y elaborar hipótesis terapéuticas útiles para la intervención."},
+  {q:"¿Quién creó el genograma y en qué años vivió?",opts:["Sigmund Freud (1856-1939)","Carl Rogers (1902-1987)","Murray Bowen (1913-1990)","José Bleger (1922-1972)"],ans:2,exp:"El genograma fue desarrollado por Murray Bowen, psiquiatra y terapeuta familiar estadounidense que vivió de 1913 a 1990."},
+  {q:"¿Cómo se adapta la entrevista según el tipo de entrevistado?",opts:["No se adapta; siempre es igual para todos","Se adapta: padres (crianza/dinámica familiar), niños/adolescentes (lúdico), parejas (dinámica relacional), familias (sistémico), grupos (colectivo), laboral (competencias)","Solo se adapta si el paciente lo solicita","Se adapta únicamente en el número de preguntas"],ans:1,exp:"Cada tipo de entrevistado requiere adaptaciones: padres → crianza/dinámica familiar; niños/adolescentes → enfoque lúdico; parejas → dinámica relacional; familia → sistémico; grupos → colectivo; laboral → competencias."},
+  {q:"¿Qué consideraciones éticas son clave en cualquier tipo de entrevista?",opts:["Solo la puntualidad y el cobro de honorarios","Consentimiento informado, confidencialidad y un estilo empático/estructurado","Solo la confidencialidad","Únicamente el consentimiento informado"],ans:1,exp:"Las consideraciones éticas fundamentales son: consentimiento informado, confidencialidad y mantener un estilo empático y estructurado con el paciente."},
+  {q:"¿Cuál es el origen histórico de la entrevista psicológica según el texto?",opts:["Surgió en el siglo XX con los tests de inteligencia de Binet","Sus raíces están en la mayéutica socrática; evolucionó con Freud y se sistematizó en el siglo XX con autores como Bleger","Fue creada por la psicología conductista en los años 1950","Se originó en la psiquiatría biológica del siglo XIX"],ans:1,exp:"La evaluación psicológica tiene raíces en la mayéutica socrática; Freud la desarrolló con la asociación libre y la escucha profunda, y en el siglo XX autores como Bleger la sistematizaron."},
+  {q:"¿Qué papel juega la asociación libre en la entrevista psicoanalítica?",opts:["Es una técnica conductual de relajación","Es una técnica de escucha profunda donde el paciente habla libremente sin censura, usada en entrevistas psicoanalíticas","Es un cuestionario de personalidad proyectiva","Es una técnica exclusiva de la terapia cognitiva"],ans:1,exp:"La asociación libre es una técnica psicoanalítica donde el paciente habla libremente sin censura, mientras el terapeuta realiza una escucha profunda para acceder a contenidos inconscientes."},
+  {q:"¿Cómo describe el texto el proceso de inferencia en evaluación psicológica?",opts:["Se va de diagnóstico a conducta observada","Se parte de la conducta observada hacia inferencias que llevan al diagnóstico","Se parte del diagnóstico y se buscan conductas que lo confirmen","No hay proceso de inferencia; el diagnóstico es directo"],ans:1,exp:"En evaluación psicológica, las pruebas analizan lo cognitivo y emocional; el proceso va de la conducta observada hacia las inferencias que conducen al diagnóstico."}
+];
+
+const LETTERS = ['A','B','C','D'];
+let cur=0, score=0, done=false, results=[];
+
+function dots() {
+  return Q.map((_,i) => {
+    let cls = 'score-dot';
+    if (i < cur) cls += results[i] ? ' hit' : ' miss';
+    else if (i === cur) cls += ' cur';
+    return `<span class="${cls}"></span>`;
+  }).join('');
+}
+
+function render() {
+  const app = document.getElementById('app');
+  if (cur >= Q.length) {
+    renderScore(app); return;
+  }
+  const q = Q[cur];
+  const pct = Math.round((cur / Q.length) * 100);
+  app.innerHTML = `
+    <div class="progress-row">
+      <div class="progress-track"><div class="progress-fill" style="width:${pct}%"></div></div>
+      <div class="progress-label">${cur + 1} / ${Q.length}</div>
+    </div>
+    <div class="score-ticker">${dots()}</div>
+    <div class="q-num">Pregunta ${cur + 1}</div>
+    <div class="q-text">${q.q}</div>
+    <div class="options" id="opts">
+      ${q.opts.map((o,i) => `
+        <button class="opt" id="o${i}" onclick="pick(${i})">
+          <span class="opt-letter">${LETTERS[i]}</span>
+          <span>${o}</span>
+        </button>`).join('')}
+    </div>
+    <div class="feedback" id="fb"></div>
+    <div class="nav-row">
+      <div class="spacer"></div>
+      <button class="btn-next" id="nb" onclick="next()">Siguiente →</button>
+    </div>`;
+  done = false;
+}
+
+function pick(i) {
+  if (done) return; done = true;
+  const q = Q[cur];
+  document.querySelectorAll('.opt').forEach(b => b.disabled = true);
+  const fb = document.getElementById('fb');
+  if (i === q.ans) {
+    score++; results[cur] = true;
+    document.getElementById('o'+i).classList.add('correct');
+    fb.className = 'feedback show ok';
+    fb.innerHTML = `<span class="fb-icon">✓</span><span><strong>¡Correcto!</strong> ${q.exp}</span>`;
+  } else {
+    results[cur] = false;
+    document.getElementById('o'+i).classList.add('wrong');
+    document.getElementById('o'+q.ans).classList.add('reveal');
+    fb.className = 'feedback show fail';
+    fb.innerHTML = `<span class="fb-icon">✗</span><span><strong>Incorrecto.</strong> ${q.exp}</span>`;
+  }
+  document.getElementById('nb').style.display = 'inline-block';
+}
+
+function next() { cur++; render(); }
+
+function renderScore(app) {
+  const pct = Math.round((score / Q.length) * 100);
+  const msgs = [
+    [90, '¡Excelente dominio del tema! Estás más que lista.'],
+    [70, '¡Muy bien! Unos temas más y lo tienes perfecto.'],
+    [50, 'Vas por buen camino. Repasa los temas que fallaste.'],
+    [0,  'Te recomiendo releer el material completo y volver a intentarlo.']
+  ];
+  const msg = msgs.find(([min]) => pct >= min)[1];
+  const r = 54, circ = 2 * Math.PI * r;
+  const offset = circ - (pct / 100) * circ;
+
+  app.innerHTML = `
+    <div class="score-screen">
+      <div class="score-ring">
+        <svg width="130" height="130" viewBox="0 0 130 130">
+          <circle class="ring-bg" cx="65" cy="65" r="${r}"/>
+          <circle class="ring-fill" cx="65" cy="65" r="${r}"
+            stroke-dasharray="${circ}"
+            stroke-dashoffset="${circ}"
+            id="ring"/>
+        </svg>
+        <div class="ring-text">
+          <div class="ring-num" id="rnum">0</div>
+          <div class="ring-sub">de ${Q.length}</div>
+        </div>
+      </div>
+      <div class="score-pct">${pct}% correcto</div>
+      <div class="score-msg">${msg}</div>
+      <button class="btn-restart" onclick="restart()">Volver a intentar</button>
+    </div>`;
+
+  // Animate ring
+  requestAnimationFrame(() => {
+    document.getElementById('ring').style.strokeDashoffset = offset;
+  });
+  // Count up number
+  let n = 0;
+  const el = document.getElementById('rnum');
+  const iv = setInterval(() => {
+    n = Math.min(n + 1, score);
+    el.textContent = n;
+    if (n >= score) clearInterval(iv);
+  }, 900 / score || 50);
+}
+
+function restart() { cur=0; score=0; done=false; results=[]; render(); }
+
+render();
+</script>
+</body>
+</html>
